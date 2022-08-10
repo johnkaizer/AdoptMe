@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.project.adoptpet.Data.PetList
 import com.project.adoptpet.Data.PetsData
 import com.project.adoptpet.R
@@ -33,7 +34,7 @@ import com.project.adoptpet.ui.theme.deepgreen
 import com.project.adoptpet.ui.theme.lightgreen
 
 @Composable
-fun Home(){
+fun Home(navController: NavController){
     Scaffold {
        Box(modifier = Modifier
            .background(lightgreen)
@@ -45,7 +46,14 @@ fun Home(){
                    Header()
                    Spacer(modifier = Modifier.height(24.dp))
                    SearchField()
-                   Spacer(modifier = Modifier.height(24.dp))
+                   Spacer(modifier = Modifier.height(32.dp))
+                   Text(text = "New Pets", style = TextStyle(color = White, fontWeight = FontWeight.Bold, fontSize = 20.sp))
+                   Spacer(modifier = Modifier.height(12.dp))
+               }
+               items(PetList.size){
+                   item -> PetListItem(item = PetList[item], onCardClick = {
+                       item -> navController.navigate("details/${item.id}")
+               })
                }
            }
        }
@@ -125,7 +133,7 @@ fun PetListItem(item:PetsData, onCardClick:(PetsData) ->Unit){
          .clip(RoundedCornerShape(size = 8.dp))
          .background(lightgreen)
          .clickable(onClick = { onCardClick(item) }, enabled = true)
-         .padding(12.dp),
+         .padding(2.dp),
      elevation =0.dp) {
      Column(Modifier.padding(8.dp)){
          Box(
@@ -135,14 +143,19 @@ fun PetListItem(item:PetsData, onCardClick:(PetsData) ->Unit){
                  .clip(shape = RoundedCornerShape(6.dp))
                  .background(color = Color.Gray),
              Alignment.Center
-         ){
-             Image(painter = painterResource(id = item.imagePath),
+         ) {
+             Image(
+                 painter = painterResource(id = item.imagePath),
                  contentDescription = null,
                  contentScale = ContentScale.Crop,
-                 modifier = Modifier.fillMaxSize())
+                 modifier = Modifier.fillMaxSize()
+             )
+         }
          
              Spacer(modifier = Modifier.height(4.dp))
              Text(item.name, style = TextStyle(color=Color.White, fontWeight = FontWeight.Bold, fontSize = 22.sp))
+         PetsDetails(age = item.age, weight = item.weight)
+
 
      }
 
@@ -189,5 +202,4 @@ fun PetsDetails(age:Int, weight:Double){
 
         
     }
-}
 }

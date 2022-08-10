@@ -10,9 +10,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.project.adoptpet.Data.PetList
+import com.project.adoptpet.ui.screen.DetailsScreen
 import com.project.adoptpet.ui.screen.Home
 import com.project.adoptpet.ui.theme.AdoptPetTheme
 
@@ -32,7 +36,11 @@ fun MyApp(){
 
     NavHost(navController = navController, startDestination = "Home"){
         composable(route = "Home"){
-            Home()
+            Home(navController)
+        }
+        composable("details/{dogIndex}", arguments = listOf(navArgument("dogIndex"){type = NavType.IntType})){
+            val dogIndex = it.arguments?.getInt("dogIndex") ?: 0
+             DetailsScreen(navController, petsData = PetList[dogIndex])
         }
     }
 
