@@ -1,17 +1,20 @@
 package com.project.adoptpet.ui.screen
 
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -53,14 +56,62 @@ fun DetailsScreen(navController: NavController, petsData: PetsData){
                     elevation = ButtonDefaults.elevation(0.dp)
 
                     ) {
-                    Text(text = "Adopt Me", style = MaterialTheme.typography.h5)
+                    Text(text = "Adopt Me", style = MaterialTheme.typography.h5, color = Color.White)
                     
                 }
                 
             }
-        }
+        },
+        backgroundColor = deepgreen,
+        contentColor = Color.White
     ) {
+        Body(Modifier.padding(16.dp), petsData = petsData)
 
     }
 
+}
+@Composable
+fun Body(modifier: Modifier,petsData: PetsData){
+    Column(modifier = modifier) {
+        Box(
+            modifier
+                .fillMaxWidth()
+                .height(280.dp)
+                .clip(shape = RoundedCornerShape(8.dp))
+
+        ){
+            Image(painter = painterResource(id = petsData.imagePath), contentDescription = null, contentScale = ContentScale.Crop,modifier= Modifier.fillMaxWidth())
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(petsData.name, style = MaterialTheme.typography.h4)
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
+            val mod = Modifier
+                .clip(shape = RoundedCornerShape(size = 8.dp))
+                .weight(1f)
+                .background(lightgreen)
+                .padding(all = 8.dp)
+            
+            DetailsBox(title ="Gender" , info = "${petsData.gender}", mod )
+            Spacer(modifier = Modifier.width(6.dp))
+            DetailsBox(title ="Age" , info = "${petsData.age}", mod )
+            Spacer(modifier = Modifier.width(6.dp))
+            DetailsBox(title ="Weight" , info = "${petsData.weight}", mod )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = "Summary", style = MaterialTheme.typography.h4)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(text = "The most beautiful pet you have ever seen?", style = MaterialTheme.typography.body2)
+    }
+
+}
+@Composable
+fun DetailsBox(title:String, info:String, modifier: Modifier){
+    Box(modifier = modifier){
+        Column() {
+            Text(text = title, Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            Text(text = info, Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            
+        }
+    }
 }
